@@ -1,24 +1,24 @@
 {
-  "name": "echobot",
+  "name": "cvbot",
   "version": "1.0.0",
-  "description": "A sample bot for getting started with Bot Framework",
+  "description": "A Bot that acts as Tim's CV",
   "main": "server.js",
   "scripts": {
     "test": ""
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/fuselabs/echobot.git"
+    "url": "git+https://github.com/timchoo/cvbot.git"
   },
   "keywords": [
     "botframework"
   ],
-  "author": "Fuse Labs",
+  "author": "Tim Choo",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/fuselabs/echobot/issues"
+    "url": "https://github.com/timchoo/cvbot/issues"
   },
-  "homepage": "https://github.com/fuselabs/echobot#readme",
+  "homepage": "https://github.com/timchoo/cvbot#readme",
   "dependencies": {
     "botbuilder": "^0.6.5",
     "restify": "^4.0.4"
