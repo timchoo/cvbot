@@ -11,7 +11,7 @@ var botConnectorOptions = {
 var bot = new builder.BotConnectorBot(botConnectorOptions);
 
 // Create Luis Dialog
-var dialog = new builder.LuisDialog(process.env.LUIS_APIURL);
+var dialog = new builder.LuisDialog('https://api.projectoxford.ai/luis/v1/application?id=87a414e9-628f-437c-a6d1-fbe4e2a8f8b4&subscription-key=52c667b93d644e38a9ae6944203edbad');
 
 
 bot.add('/', dialog);
