@@ -11,7 +11,7 @@ var botConnectorOptions = {
 var bot = new builder.BotConnectorBot(botConnectorOptions);
 
 // Create Luis Dialog
-var dialog = new builder.LuisDialog('https://api.projectoxford.ai/luis/v1/application?id=87a414e9-628f-437c-a6d1-fbe4e2a8f8b4&subscription-key=52c667b93d644e38a9ae6944203edbad');
+var dialog = new builder.LuisDialog(process.env.LUIS_APIURL);
 
 
 bot.add('/', dialog);
@@ -22,11 +22,29 @@ dialog.on('Weaknesses', builder.DialogAction.send('I intensely dislike confronta
 dialog.on('Education', builder.DialogAction.send('I have a B.Sc. in Computer Science from Bob Jones University'));
 dialog.on('Certifications', builder.DialogAction.send('I am a Project Management Professional (PMP)'));
 dialog.on('Title', builder.DialogAction.send('I am a senior software engineer as well as technial evangelist with IBM Analytics'));
-dialog.on('WorkExperience', builder.DialogAction.send('I’m currently a senior software enigneer with the Competitive Project Office in IBM Analytics. I cover products in the mobile, DevOps, IoT, as well as Enterprise Social Solutions portfolio. That means I have to be familiar with both our products as well as those of the competition such as Microsoft and Google. My role is both internal as well as external facing. On the one hand I travel around the world delivering a series of roadshows to customers touting the competitive advantages of our products vis-à-vis the competition. This is a half-day session where 2 of us will deliver both presentations as well as technical demos to showcase our superiority. On the other hand I consult with the product development teams to keep them abreast of the competition and to make them aware of areas where we are falling behind. I do walkthroughs with PMs to make sure they understand the gravity of the situation. At the same time I also help our field sales folks close deals where there is a significant competitive threat, whether it’s a greenfield, head to head, or defend opportunity. Before this I was a strategy consulting with BCS. I worked mainly with financial service/insurance clients to help them align their business strategy with technology initiatives. I would come in, conduct interviews with the client to understand their goals, current infrastructure, and then apply a model such as heatmaps, component business modeling etc to help them prioritize. Finally I would create a roadmap for implementation. I started out in IBM as a solutions consultant where I worked with clients across APAC and the USA implementing software solutions built on IBM platforms. In the beginning this was primarily using Domino, but over time grew to include WebSphere and Commerce. For more detail please check my [LinkedIn profile](http://www.linkedin.com/in/timchoo)'));
+dialog.on('WorkExperience', '/work');
 dialog.on('Patents', builder.DialogAction.send('Yes, United States US 20070276676 A1 Social Information System'));
 dialog.on('Skills', builder.DialogAction.send('I have skills in Javascript, Java, Eclipse, Xcode, Swift/iOS, MobileFirst Platform, MobileFirst Quality Assurance, JQuery, Bootstrap, WordPress, Windows 10 IoT, Azure, Bluemix, Oracle WebCenter, Jive, SalesForce Chatter, Microsoft Office 365, Yammer, SharePoint, Exchange, Lync, InfoPath, Amazon WorkMail, Slack, Google Apps, Atlassian Confluence, Socialcast, Adobe Experience Manager, WebSphere Portal, Domino, IBM Connections, Sametime, JBoss, MyEclipse, Git, TeamForge, Subversion, JIRA, Good Technologies MDM, Xtify, Urban Airship, strategy consulting, conducting workshops/facilitating, project management, SCRUM, utilizing prioritization frameworks (heatmaps, BCD, Component business modeling)'));
 dialog.onDefault(builder.DialogAction.send("Please ask me a question about my resume/CV. For example you can ask me about my work experience, skills, background, current role, education, patents, or certifications. You can also ask common interview questions like my strengths or weaknesses"));
 
+bot.add('/work', [
+        function(session) {
+             builder.Prompts.choice(session, "Which part of my work history do you want to know about (pick a number):", ["Current role", "Strategy Consulting at IBM Business Consulting Services", "Associate at Mainspring","Principal Systems Engineer at IBM Services","Senior Consultant at Lotus Asia Pacific","Assoc Member of Technical Staff at Information Technology Institute"]);
+        },
+        function(session, results) {
+            switch (results.response.entity) {
+                case 'Current role': session.send("I’m currently a senior software enigneer with the Competitive Project Office in IBM Analytics. I cover products in the mobile, DevOps, IoT, as well as Enterprise Social Solutions portfolio. That means I have to be familiar with both our products as well as those of the competition such as Microsoft and Google. My role is both internal as well as external facing. On the one hand I travel around the world delivering a series of roadshows to customers touting the competitive advantages of our products vis-à-vis the competition. This is a half-day session where 2 of us will deliver both presentations as well as technical demos to showcase our superiority. On the other hand I consult with the product development teams to keep them abreast of the competition and to make them aware of areas where we are falling behind. I do walkthroughs with PMs to make sure they understand the gravity of the situation. At the same time I also help our field sales folks close deals where there is a significant competitive threat, whether it’s a greenfield, head to head, or defend opportunity.");
+                case 'Strategy Consulting at IBM Business Consulting Services': session.send('I was a strategy consultant with BCS. I worked mainly with financial service/insurance clients to help them align their business strategy with technology initiatives. I would come in, conduct interviews with the client to understand their goals, current infrastructure, and then apply a model such as heatmaps, component business modeling etc to help them prioritize. Finally I would create a roadmap for implementation.');
+                case 'Associate at Mainspring': session.send('I developed technology strategy and technical architectures in support of business strategy objectives, and created sales proposals. Mainspring was acquired by IBM in April 2001 shortly after I joined them (from IBM)');
+                case 'Principal Systems Engineer at IBM Services': session.send('I was the development team lead for the Commerce front end (WebSphere Application Server, Net.Commerce, and Clarify) of a startup that was a collaboration between IBM, Enron, and AOL - the New Power Company (www.newpower.com).We successfully launched the site selling deregulated energy to customers in PA and NJ allowing the company to raise $480M in its IPO (Nasdaq: NPW)');
+                case 'Senior Consultant at Lotus Asia Pacific': session.send(' I started out in IBM as a solutions consultant where I worked with clients across APAC implementing software solutions built on IBM platforms. In the beginning this was primarily using Domino, but over time grew to include WebSphere.');
+                case 'Assoc Member of Technical Staff at Information Technology Institute': session.send('I was a software Engineer responsible for workflow and document management, as part of a team that was working on the first-of-its-kind, nationwide, integrated case management system that linked the police, narcotics bureau, criminal investigation division, attorney general’s chambers, subordinate court, high court, and prison systems across the country');
+         
+                default: session.send('You entered an invalid response');
+            }
+            session.endDialog();
+        }
+    ]);
 
 bot.configure({
     userWelcomeMessage: "Welcome to Tim's CV Bot",
